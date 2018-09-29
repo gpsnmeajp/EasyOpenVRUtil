@@ -1,6 +1,7 @@
 ﻿/**
- * EasyOpenVRUtil by gpsnmeajp v0.03
- * 2018/09/26
+ * EasyOpenVRUtil by gpsnmeajp v0.04
+ * https://github.com/gpsnmeajp/EasyOpenVRUtil
+ * https://sabowl.sakura.ne.jp/gpsnmeajp/
  * 
  * These codes are licensed under CC0.
  * http://creativecommons.org/publicdomain/zero/1.0/deed.ja
@@ -127,8 +128,9 @@ namespace EasyLazyLibrary
 
 
         //終了イベントをキャッチした時に戻す
-        private bool ProcessEventAndCheckQuit()
+        public bool ProcessEventAndCheckQuit()
         {
+            if (!IsReady()) { return false; }
             //イベント構造体のサイズを取得
             uint uncbVREvent = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(VREvent_t));
 
@@ -147,7 +149,7 @@ namespace EasyLazyLibrary
             return false;
         }
 
-        private void AutoExitOnQuit()
+        public void AutoExitOnQuit()
         {
             if (ProcessEventAndCheckQuit())
             {
@@ -156,7 +158,7 @@ namespace EasyLazyLibrary
         }
 
         //アプリケーションを終了させる
-        private void ApplicationQuit()
+        public void ApplicationQuit()
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
@@ -210,17 +212,9 @@ namespace EasyLazyLibrary
             return false;
         }
 
-        public void SetHMDGameObjectTransform(ref UnityEngine.GameObject obj)
-        {
-        }
-
         public Transform GetHMDTransform()
         {
             return GetTransform(GetHMDIndex());
-        }
-
-        public void SetLeftControllerObjectTransform(ref UnityEngine.GameObject obj)
-        {
         }
 
         public Transform GetLeftControllerTransform()
@@ -253,12 +247,12 @@ namespace EasyLazyLibrary
 
             res.deviceid = index;
 
-            //TODO 右手系・左手系の変換が必要な気がする。
+            //右手系・左手系の変換をした
             res.velocity[0] = Pose.vVelocity.v0;
             res.velocity[1] = Pose.vVelocity.v1;
-            res.velocity[2] = Pose.vVelocity.v2;
-            res.angularVelocity[0] = Pose.vAngularVelocity.v0;
-            res.angularVelocity[1] = Pose.vAngularVelocity.v1;
+            res.velocity[2] = -Pose.vVelocity.v2;
+            res.angularVelocity[0] = -Pose.vAngularVelocity.v0;
+            res.angularVelocity[1] = -Pose.vAngularVelocity.v1;
             res.angularVelocity[2] = Pose.vAngularVelocity.v2;
 
             res.position = trans.pos;
@@ -277,6 +271,16 @@ namespace EasyLazyLibrary
             obj.transform.rotation = transform.rotation;
         }
 
+        public void SetGameObjectLocalTransform(ref UnityEngine.GameObject obj, Transform transform)
+        {
+            if (transform == null)
+            {
+                return;
+            }
+            obj.transform.localPosition = transform.position;
+            obj.transform.localRotation = transform.rotation;
+        }
+
         public void SetGameObjectTransformWithOffset(ref UnityEngine.GameObject obj, Transform transform, Transform transformOffset)
         {
             if (transform == null)
@@ -287,8 +291,28 @@ namespace EasyLazyLibrary
             {
                 transformOffset = new Transform();
             }
+
+            Debug.Log(transform.position.ToString());
+            Debug.Log(transformOffset.position.ToString());
+            Debug.Log((transform.position - transformOffset.position).ToString());
+
             obj.transform.position = transform.position - transformOffset.position;
             obj.transform.rotation = transform.rotation * Quaternion.Inverse(transformOffset.rotation);
+        }
+
+        public void SetGameObjectLocalTransformWithOffset(ref UnityEngine.GameObject obj, Transform transform, Transform transformOffset)
+        {
+            if (transform == null)
+            {
+                return;
+            }
+            if (transformOffset == null)
+            {
+                transformOffset = new Transform();
+            }
+
+            obj.transform.localPosition = transform.position - transformOffset.position;
+            obj.transform.localRotation = transform.rotation * Quaternion.Inverse(transformOffset.rotation);
         }
 
         //指定デバイスの姿勢情報を取得

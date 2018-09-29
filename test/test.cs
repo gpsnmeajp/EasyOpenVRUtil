@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EasyLazyLibrary;
 
-public class UnitTest : MonoBehaviour {
+public class test : MonoBehaviour {
     public GameObject obj;
     public GameObject obj2;
     public GameObject obj3;
