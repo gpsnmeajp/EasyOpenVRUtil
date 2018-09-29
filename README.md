@@ -17,7 +17,7 @@ VR内スクリーンショットを勝手に撮影したり、
 CC0ライセンスです。
 
 バグ報告などは、プルリクエスト、コメント、メール  
-Discord:https://discord.gg/QSrDhE8まで
+Discord: https://discord.gg/QSrDhE8 まで
 
 # LICENSE
 These codes are licensed under CC0.  
