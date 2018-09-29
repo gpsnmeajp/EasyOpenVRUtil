@@ -225,7 +225,7 @@ GetDeviceIndexBySerialNumber()でindexを取得後、GetPose()を使用するこ
 シリアル番号を毎回検索するため重いので非推奨。(デバッグやプロトタイプ向け)  
 GetDeviceIndexBySerialNumber()でindexを取得後、GetVelocity()を使用することをおすすめする。  
 
-##全姿勢情報
+## 全姿勢情報
 ### public void Update(ETrackingUniverseOrigin origin = ETrackingUniverseOrigin.TrackingUniverseStanding)
 全姿勢情報を更新する。この姿勢情報は内部で様々利用している。  
 既定では必要に応じ、概ねのメソッドの呼び出し時に自動で更新されるようになっているため不要。  
@@ -320,7 +320,7 @@ trueで自動更新(既定)、falseで手動更新。
 us=0～3999 (省略した場合は3000)  
 成功すればtrue、デバイスが接続されていなければfalse  
 
-##スクリーンショット
+## スクリーンショット
 ### public bool TakeScreenShot(string path, string pathVR)
 VRコンポジターにスクリーンショットを撮影を指示する。  
 pathは通常写真、pathVRはステレオ写真。それぞれフルpathを指定すること。  
