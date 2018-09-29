@@ -26,5 +26,6 @@ public class VRTracker : MonoBehaviour {
         }
 
         eou.SetGameObjectLocalTransformWithOffset(ref Tracker, t, offset);
+        Debug.Log(t.ToString());
     }
 }

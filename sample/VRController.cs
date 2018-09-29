@@ -18,7 +18,7 @@ public class VRController : MonoBehaviour {
 
         var l = eou.GetLeftControllerTransform();
         var r = eou.GetRightControllerTransform();
-        eou.SetGameObjectLocalTransform(ref LeftController, l);
+        eou.SetGameObjectLocalTransform(ref LeftController, eou.GetLeftControllerTransform());
         eou.SetGameObjectLocalTransform(ref RightController, r);
     }
 }

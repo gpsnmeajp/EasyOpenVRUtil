@@ -33,6 +33,11 @@ namespace EasyLazyLibrary
             public Quaternion rotation = Quaternion.identity;
             public Vector3 velocity = Vector3.zero;
             public Vector3 angularVelocity = Vector3.zero;
+
+            public override string ToString()
+            {
+                return "deviceid: " + deviceid + " position:" + position.ToString() + " rotation:" + rotation.ToString() + " velocity:"+ velocity.ToString() + " angularVelocity:" + angularVelocity.ToString();
+            }
         }
 
         public EasyOpenVRUtil()
