@@ -20,11 +20,11 @@ CC0ライセンスです。
 Discord:https://discord.gg/QSrDhE8まで
 
 # LICENSE
-These codes are licensed under CC0.
+These codes are licensed under CC0.  
 http://creativecommons.org/publicdomain/zero/1.0/deed.ja
  
 # 使い方
-こちらを参照してください。
+こちらを参照してください。  
 https://github.com/gpsnmeajp/EasyOpenVRUtil/wiki
 
 # 連絡・寄付・その他
