@@ -1,5 +1,5 @@
 ﻿/**
- * EasyOpenVRUtil by gpsnmeajp v0.04
+ * EasyOpenVRUtil by gpsnmeajp v0.041
  * https://github.com/gpsnmeajp/EasyOpenVRUtil
  * https://sabowl.sakura.ne.jp/gpsnmeajp/
  * 
