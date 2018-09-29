@@ -135,7 +135,7 @@ HMDのデバイスindexを取得する。
 右コントローラーのデバイスindexを取得する。
 接続されていないなど、取得できなかった場合はInvalidDeviceIndexが帰る。
 
-##接続デバイス管理
+## 接続デバイス管理
 ### public int ConnectedDevices()
 現在接続されているデバイス数を返す。
 これにはHMDやコントローラーの他、ベースステーションやトラッカーも含む。
@@ -178,7 +178,7 @@ RenderModelNameに指定した文字列を含むデバイスindexのリストを
 改行区切りであり、Debug.Logと組み合わせたり、Textと組み合わせることを想定している。
 デバイスリスト取得系メソッドの結果を確認するのに利用できる。
 
-##デバイスの姿勢と速度
+## デバイスの姿勢と速度
 ※速度情報は、OpenVRの右手系のままです。なおUnityは左手系です。
 　後々、互換性をもたせたまま修正します。
 ### public bool GetHMDPose(out Vector3 pos, out Quaternion rot)
@@ -243,7 +243,7 @@ trueで自動更新(既定)、falseで手動更新。
 デバイスの追従に成功しているか失敗しているか、追従範囲外に出たかなどがわかる。
 無効なデバイスを指定した場合、ETrackingResult.Uninitializedが帰る。
 
-##デバイスの詳細情報
+## デバイスの詳細情報
 ### public bool IsDeviceConnected(uint idx)
 指定したデバイスが接続されているか調べる
 接続されていればture、されていなければfalse
@@ -306,7 +306,7 @@ trueで自動更新(既定)、falseで手動更新。
 ### public bool GetControllerState(uint index, out VRControllerState_t state)
 デバイスのボタン押されている情報などのステータスを取得する
 
-##デバイスの振動
+## デバイスの振動
 ### public bool TriggerHapticPulse(uint index, ushort us=3000)
 指定したデバイスを振動させる。
 us=0～3999 (省略した場合は3000)
@@ -326,7 +326,7 @@ Unityを90fpsに設定する。
 何も考えずにUnityでVRやろうとするとfpsがうなぎのぼりになっている場合があります。
 
 
-#サンプルソース
+# サンプルソース
 ##VRTracker
 シリアル番号からトラッカーを検出して、GameObjectに反映します
 ![image.png](https://qiita-image-store.s3.amazonaws.com/0/191114/713ddf26-927c-7db5-c69d-99695742abf9.png)
