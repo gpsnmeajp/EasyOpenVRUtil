@@ -16,6 +16,8 @@ VR内スクリーンショットを勝手に撮影したり、
 
 CC0ライセンスです。
 
+注: Steam VR Plugin for Unityに依存しています。(v2.0以前、以降両方使えるようには作成しています)
+
 バグ報告などは、プルリクエスト、コメント、メール  
 Discord: https://discord.gg/QSrDhE8 まで
 
