@@ -31,3 +31,10 @@ https://github.com/gpsnmeajp/EasyOpenVRUtil/wiki
 
 # 連絡・寄付・その他
 https://sabowl.sakura.ne.jp/gpsnmeajp/
+
+# 参考にしたサイト
+【Unity】ViveのHMDなしにTrackerを使う
+http://shop-0761.hatenablog.com/entry/2018/01/08/034418
+
+HTC直伝「虎の巻 2018」！ VIVE トラッカー＆ベースステーション2.0のトラブル回避術【CEDEC】
+http://panora.tokyo/72556/
