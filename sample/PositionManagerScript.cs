@@ -7,7 +7,10 @@
  *  EasyOpenVROverlayForUnity
  *  https://sabowl.sakura.ne.jp/gpsnmeajp/unity/EasyOpenVROverlayForUnity/
  * 
- * gpsnmeajp 2019/01/04
+ * gpsnmeajp 2019/01/04 v0.02
+ * v0.02: ビルドすると位置が原点になる問題に対処
+ * v0.01: 公開
+ * 
  * These codes are licensed under CC0.
  * http://creativecommons.org/publicdomain/zero/1.0/deed.ja
  */
@@ -34,15 +37,12 @@ public class PositionManagerScript : MonoBehaviour {
     private bool isScreenMoving = false; //画面を移動させようとしているか？
     private bool screenMoveWithRight = false; //それが右手で行われているか？
 
+    private bool PositionInitialize = true; //位置を初期化するフラグ(完了するとfalseになる)
+
     void Start () {
         //姿勢取得ライブラリを初期化
         util.Init();
-
-        //とりあえずUnityスタート時のHMD位置に設定
-        //(サンプル用。より適切なタイミングで呼び直してください。
-        // OpenVRが初期化されていない状態では原点になってしまいます)
-        setPosition();
-    }
+   }
 
     void Update () {
         //姿勢取得ライブラリが初期化されていないとき初期化する
@@ -51,6 +51,17 @@ public class PositionManagerScript : MonoBehaviour {
         {
             util.Init();
             return;
+        }
+
+        //HMDの位置情報が使えるようになった & 初期位置が初期化されていないとき
+        if (util.GetHMDTransform() != null && PositionInitialize) {
+            //とりあえずUnityスタート時のHMD位置に設定
+            //(サンプル用。より適切なタイミングで呼び直してください。
+            // OpenVRが初期化されていない状態では原点になってしまいます)
+            setPosition();
+
+            //初期位置初期化処理を停止
+            PositionInitialize = false;
         }
 
         //カーソル位置を更新
