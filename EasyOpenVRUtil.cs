@@ -1,5 +1,5 @@
 ﻿/**
- * EasyOpenVRUtil by gpsnmeajp v0.041
+ * EasyOpenVRUtil by gpsnmeajp v0.05
  * https://github.com/gpsnmeajp/EasyOpenVRUtil
  * https://sabowl.sakura.ne.jp/gpsnmeajp/
  * 
@@ -19,13 +19,25 @@ namespace EasyLazyLibrary
 {
     public class EasyOpenVRUtil
     {
-
-        CVRSystem openvr = null;
+        //定数定義
         public const uint InvalidDeviceIndex = OpenVR.k_unTrackedDeviceIndexInvalid;
 
+        //VRハンドル
+        CVRSystem openvr = null;
+
+        //内部保持用全デバイス姿勢
         TrackedDevicePose_t[] allDevicePose;
+
+        //デバイス姿勢を常にアップデートするか
         bool autoupdate = true;
 
+        //光子遅延補正予測時間(0=補正なし or 予測時間取得失敗)
+        float PredictedTime = 0f;
+
+        //最終更新フレームカウント
+        int LastFrameCount = 0;
+
+        //姿勢クラス
         public class Transform
         {
             public uint deviceid = InvalidDeviceIndex;
@@ -34,6 +46,7 @@ namespace EasyLazyLibrary
             public Vector3 velocity = Vector3.zero;
             public Vector3 angularVelocity = Vector3.zero;
 
+            //デバッグ用
             public override string ToString()
             {
                 return "deviceid: " + deviceid + " position:" + position.ToString() + " rotation:" + rotation.ToString() + " velocity:"+ velocity.ToString() + " angularVelocity:" + angularVelocity.ToString();
@@ -190,19 +203,33 @@ namespace EasyLazyLibrary
             allDevicePose = new TrackedDevicePose_t[OpenVR.k_unMaxTrackedDeviceCount];
             if (!IsReady()) { return; }
             //すべてのデバイスの情報を取得
-            openvr.GetDeviceToAbsoluteTrackingPose(origin, 0f, allDevicePose);
+            openvr.GetDeviceToAbsoluteTrackingPose(origin, PredictedTime, allDevicePose);
+            //最終更新フレームを更新
+            LastFrameCount = Time.frameCount;
         }
 
         //デバイスが有効か
         public bool IsDeviceValid(uint index)
         {
+            //自動更新処理
             if (autoupdate)
             {
-                Update();
+                //前回と違うフレームの場合のみ更新
+                if (LastFrameCount != Time.frameCount)
+                {
+                    UpdatePredictedTime(); //光子遅延時間のアップデート追加
+                    Update();
+                }
             }
+            //情報が有効でないなら更新
             if (allDevicePose == null)
             {
                 Update();
+            }
+            //それでも情報が有効でないなら失敗
+            if (allDevicePose == null)
+            {
+                return false;
             }
 
             //device indexが有効
@@ -730,6 +757,69 @@ namespace EasyLazyLibrary
         public List<uint> GetBaseStationIndexList()
         {
             return GetDeviceIndexListByRenderModelName("lh_basestation_vive");
+        }
+
+
+
+        //----------------光子遅延時間----------------------------
+
+        //予測遅延時間(動作-光子遅延時間)を設定
+        public void UpdatePredictedTime()
+        {
+            PredictedTime = GetPredictedTime();
+        }
+
+        //予測遅延時間(動作-光子遅延時間)を無効化
+        public void ClearPredictedTime()
+        {
+            PredictedTime = 0;
+        }
+
+        //現在の予測遅延時間(動作-光子遅延時間)を取得
+        public float GetPredictedTime()
+        {
+            //最後のVsyncからの経過時間(フレーム経過時間)を取得
+            float FrameTime = 0;
+            ulong FrameCount = 0;
+
+            if (!IsReady()) { return 0; }
+
+            if (!openvr.GetTimeSinceLastVsync(ref FrameTime, ref FrameCount))
+            {
+                return 0; //有効な値を取得できなかった
+            }
+
+            //たまにすごい勢いで増えることがある
+            if (FrameTime > 1.0f)
+            {
+                return 0; //有効な値を取得できなかった
+            }
+
+            //1フレームあたりの時間取得
+            float DisplayFrequency = 0;
+            if (!GetPropertyFloat(GetHMDIndex(), ETrackedDeviceProperty.Prop_DisplayFrequency_Float, out DisplayFrequency))
+            {
+                return 0; //有効な値を取得できなかった
+            }
+            float DisplayCycle = 1f / DisplayFrequency;
+
+            //光子遅延時間(出力からHMD投影までにかかる時間)取得
+            float PhotonDelay = 0;
+            if (!GetPropertyFloat(GetHMDIndex(), ETrackedDeviceProperty.Prop_SecondsFromVsyncToPhotons_Float, out PhotonDelay))
+            {
+                return 0; //有効な値を取得できなかった
+            }
+
+            //予測遅延時間(1フレームあたりの時間 - 現在フレーム経過時間 + 光子遅延時間)
+            var PredictedTimeNow = DisplayCycle - FrameTime + PhotonDelay;
+
+            //負の値は過去になる。
+            if (PredictedTimeNow < 0)
+            {
+                return 0;
+            }
+
+            return PredictedTimeNow;
         }
 
 
