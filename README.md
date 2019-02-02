@@ -32,6 +32,10 @@ https://github.com/gpsnmeajp/EasyOpenVRUtil/wiki
 # 連絡・寄付・その他
 https://sabowl.sakura.ne.jp/gpsnmeajp/
 
+Steam VR 2.0の方の入力システムを使うライブラリ  
+EasyOpenVRActionInput  
+https://github.com/gpsnmeajp/EasyOpenVRActionInput  
+
 # 参考にしたサイト
 【Unity】ViveのHMDなしにTrackerを使う
 http://shop-0761.hatenablog.com/entry/2018/01/08/034418
