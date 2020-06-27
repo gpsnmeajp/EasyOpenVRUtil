@@ -1,5 +1,5 @@
 ﻿/**
- * EasyOpenVRUtil by gpsnmeajp v0.05
+ * EasyOpenVRUtil by gpsnmeajp v0.05b
  * https://github.com/gpsnmeajp/EasyOpenVRUtil
  * https://sabowl.sakura.ne.jp/gpsnmeajp/
  * 
@@ -394,8 +394,7 @@ namespace EasyLazyLibrary
             {
                 return false;
             }
-
-            StringBuilder s = new StringBuilder();
+            StringBuilder s = new StringBuilder((int)size);
             s.Length = (int)size; //文字長さ確保
                                   //device情報を取得する
             openvr.GetStringTrackedDeviceProperty(idx, prop, s, size, ref error);
